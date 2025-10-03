@@ -103,6 +103,49 @@ input, select, textarea, button {
     border-radius: 6px;
 }
 
+/* Game Board */
+#board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.category {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  background: #f9f9f9;
+}
+
+.category h2 {
+  margin-bottom: 12px;
+}
+
+.q-btn {
+  display: inline-block;
+  margin: 4px;
+  padding: 10px 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: cadetblue;
+  color: white;
+  cursor: pointer;
+}
+
+.q-btn:hover {
+  background-color: #4682a9;
+}
+
+#question-panel {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fffdf5;
+}
 button {
     cursor: pointer;
     background: #111;
