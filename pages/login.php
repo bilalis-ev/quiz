@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="../assets/css/style.css">
 
-    <title>QuizWars: Sign up</title>
+    <title>QuizWars: Log in</title>
 </head>
 
 <body>
@@ -20,28 +20,22 @@
             <a href="quiz.html">Play</a>
             <a href="create.html">Custom</a>
             <a href="suggest.html">Suggestions</a>
-            <a href="account.html">Account</a>
-            <a href="login.html">Log in</a>
-            <a href="signup.html">Sign Up</a>
+            <a href="account.php">Account</a>
+            <a href="login.php">Log in</a>
+            <a href="signup.php">Sign Up</a>
         </nav>
     </header>
     <main>
-        <h1>Create your own account!</h1>
+        <h1>Log in to your account!</h1>
 
-        <form method="post" action="../php/process_signup.php">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
+        <form method="post" action="../php/process_login.php" novalidate>
+            <label for="id">Username or Email</label><br>
+            <input id="id" name="id" type="text" required><br><br>
 
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
+            <label for="password">Password</label><br>
+            <input id="password" name="password" type="password" required><br><br>
 
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-
-            <label for="confirm">Confirm Password:</label><br>
-            <input type="password" id="confirm" name="confirm" required><br><br>
-
-            <button type="submit">Sign Up</button>
+            <button type="submit">Log in</button>
         </form>
     </main>
     <footer>

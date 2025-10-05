@@ -1,3 +1,12 @@
+<?php
+declare(strict_types=1);
+session_start();
+if (empty($_SESSION['logged_in'])) {
+    header('Location: quizwars/pages/login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +16,7 @@
 
     <link rel = "stylesheet" href = "../assets/css/style.css">
 
-    <title>QuizWars: Log in</title>
+    <title>QuizWars: Account</title>
 </head>
 <body>
     <header>
@@ -17,13 +26,17 @@
             <a href = "quiz.html">Play</a>
             <a href = "create.html">Custom</a>
             <a href = "suggest.html">Suggestions</a>
-            <a href = "account.html">Account</a>
-            <a href = "login.html">Log in</a>
-            <a href = "signup.html">Sign Up</a>
+            <a href = "account.php">Account</a>
+            <a href = "login.php">Log in</a>
+            <a href = "signup.php">Sign Up</a>
         </nav>
     </header>
     <main>
-        <h1>Log in to your account!</h1>
+        <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name'] ?? 'Player', ENT_QUOTES, 'UTF-8') ?></h1>
+        <p>You're logged in.</p>
+        <form method="post" action="../php/logout.php">
+            <button type="submit">Log out</button>
+        </form>
     </main>
     <footer>
         <p>© 2025 QuizWars. All rights reserved.</p>
