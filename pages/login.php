@@ -1,3 +1,10 @@
+<?php
+session_start();
+$errors = $_SESSION['login_errors'] ?? [];
+$old = $_SESSION['login_old'] ?? [];
+unset($_SESSION['login_errors'], $_SESSION['login_old']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,9 +35,19 @@
     <main>
         <h1>Log in to your account!</h1>
 
+        <?php if ($errors): ?>
+            <div class="error-box" style="border:1px solid red; padding:.75rem; margin:.75rem 0; background:#ffecec;">
+            <ul style="margin:0; padding-left:1.2rem;">
+            <?php foreach ($errors as $err): ?>
+                <li><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></li>
+            <?php endforeach; ?>
+            </ul>
+            </div>
+        <?php endif; ?>
+
         <form method="post" action="../php/process_login.php" novalidate>
             <label for="id">Username or Email</label><br>
-            <input id="id" name="id" type="text" required><br><br>
+            <input id="id" name="id" type="text" value="<?= htmlspecialchars($old['id'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required><br><br>
 
             <label for="password">Password</label><br>
             <input id="password" name="password" type="password" required><br><br>

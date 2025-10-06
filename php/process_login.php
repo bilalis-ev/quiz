@@ -21,8 +21,10 @@ if ($id === '' || $password === '') {
 }
 
 if ($errors) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Login failed:\n- " . implode("\n- ", $errors);
+    $_SESSION['login_errors'] = $errors;
+    $_SESSION['login_old'] = ['id' => $id];
+
+    header('Location: /quizwars/pages/login.php');
     exit;
 }
 
@@ -30,15 +32,13 @@ $stm = $pdo->prepare('SELECT id, username, email, password_hash FROM users WHERE
 $stm->execute([$id, $id]);
 $user = $stm->fetch();
 
-if (!$user) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Invalid credentials";
-    exit;
-}
+if (!$user || !password_verify($password, $user['password_hash'] ?? '')) {
+    $errors[] = 'Invalid credentials';
 
-if (!password_verify($password, $user['password_hash'])) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo 'Invalid credentials2';
+    $_SESSION['login_errors'] = $errors;
+    $_SESSION['login_old'] = ['id' => $id];
+
+    header('Location: /quizwars/pages/login.php');
     exit;
 }
 
