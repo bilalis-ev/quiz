@@ -8,6 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('Method not allowed');
 }
 
+$csrf = $_POST['csrf'] ?? '';
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+    http_response_code(419);
+    exit('Invalid or missing CSRF token');
+}
+
 $id = trim($_POST['id'] ?? $_POST['username'] ??  $_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 

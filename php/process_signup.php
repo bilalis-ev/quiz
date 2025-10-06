@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+session_start();
+
 // only post acceptance
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     exit('Method not allowed');
+}
+
+$csrf = $_POST['csrf'] ?? '';
+
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+    http_response_code(419);
+    exit('Invalid or missing csrf token');
 }
 
 // input collection and trimming

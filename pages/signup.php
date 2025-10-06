@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,6 +48,8 @@
 
             <label for="confirm">Confirm Password:</label><br>
             <input type="password" id="confirm" name="confirm" required><br><br>
+
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
             <button type="submit">Sign Up</button>
         </form>

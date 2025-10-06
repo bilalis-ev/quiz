@@ -5,6 +5,10 @@ if (!empty($_SESSION['logged_in'])) {
     exit;
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $errors = $_SESSION['login_errors'] ?? [];
 $old = $_SESSION['login_old'] ?? [];
 
@@ -58,6 +62,8 @@ unset($_SESSION['login_errors'], $_SESSION['login_old']);
             <label for="password">Password</label><br>
             <input id="password" name="password" type="password" required><br><br>
 
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+            
             <button type="submit">Log in</button>
         </form>
     </main>
