@@ -1,7 +1,13 @@
 <?php
 session_start();
+if (!empty($_SESSION['logged_in'])) {
+    header('Location: /quizwars/pages/account.php');
+    exit;
+}
+
 $errors = $_SESSION['login_errors'] ?? [];
 $old = $_SESSION['login_old'] ?? [];
+
 unset($_SESSION['login_errors'], $_SESSION['login_old']);
 ?>
 

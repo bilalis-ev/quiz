@@ -3,6 +3,7 @@
 declare(strict_types=1);
 session_start();
 $_SESSION = [];
+
 if (ini_get('session_use_cookies')) {
     $params = session_get_cookie_params();
     setcookie(
@@ -15,6 +16,8 @@ if (ini_get('session_use_cookies')) {
         $params['httponly'],
     );
 }
+
 session_destroy();
-header('Location: quizwars/pages/login.php');
+
+header('Location: /quizwars/pages/login.php');
 exit;

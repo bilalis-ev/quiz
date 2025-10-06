@@ -2,7 +2,7 @@
 declare(strict_types=1);
 session_start();
 if (empty($_SESSION['logged_in'])) {
-    header('Location: quizwars/pages/login.php');
+    header('Location: /quizwars/pages/login.php');
     exit;
 }
 ?>
@@ -33,7 +33,9 @@ if (empty($_SESSION['logged_in'])) {
     </header>
     <main>
         <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name'] ?? 'Player', ENT_QUOTES, 'UTF-8') ?></h1>
+
         <p>You're logged in.</p>
+
         <form method="post" action="../php/logout.php">
             <button type="submit">Log out</button>
         </form>
