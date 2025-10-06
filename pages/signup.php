@@ -4,6 +4,8 @@ session_start();
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+
+$errors = $_SESSION['signup_errors'] ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +37,16 @@ if (empty($_SESSION['csrf_token'])) {
     </header>
     <main>
         <h1>Create your own account!</h1>
+
+        <?php if ($errors): ?>
+            <div class="error-box" style="border:1px solid red; padding:.75rem; margin:.75rem 0; background:#ffecec;">
+            <ul style="margin:0; padding-left:1.2rem;">
+            <?php foreach ($errors as $err): ?>
+                <li><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></li>
+            <?php endforeach; ?>
+            </ul>
+            </div>
+        <?php endif; ?>
 
         <form method="post" action="../php/process_signup.php" novalidate>
             <label for="username">Username:</label><br>
