@@ -11,6 +11,7 @@
     <title><?= htmlspecialchars($page_title ?? 'Quizwars', ENT_QUOTES, 'UTF-8') ?></title>
 </head>
 <body>
+    //asdkjaskdl
     <header>    
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">            
             <div class="container-fluid">
