@@ -30,6 +30,7 @@ $errors = [];
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors[] = 'Invalid email';
     $_SESSION['signup_errors'] = $errors;
+    $_SESSION['signup_old'] = ['email' => $email];
     header('Location: /quizwars/pages/signup.php');
     exit;
 } else {
@@ -72,7 +73,7 @@ if (!preg_match('/[0-9]/', $password)) {
     $errors[] = 'Password must contain at least one number';
 }
 if (!preg_match('/[^A-Za-z0-9]/', $password)) {
-    $errors[] = 'Password must contain a special letter';
+    $errors[] = 'Password must contain a special character';
 }
 if (preg_match('/\s/', $password)) {
     $errors[] = 'Password must not contain spaces';
