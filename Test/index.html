@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizWars</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="index.html" class="logo-link">
+  <img src="logo.png" alt="Quiz Logo" class="logo">
+</a>
+
+<video autoplay muted loop id="bg-video">
+  <source src="space.mp4" type="video/mp4">
+</video>
+
+<div class="quizwars">
+  <div style="height: 400px;"></div>
+
+  <div class="categories">
+    <div class="category brown">
+      <h2>History</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category blue">
+      <h2>Geography</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category red">
+      <h2>Handler ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category pink">
+      <h2>Logo ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category grey">
+      <h2>Guess the Song</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category green">
+      <h2>Top 5</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category purple">
+      <h2>Movie ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category gold">
+      <h2>Pokemon ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category lightblue">
+      <h2>Photo ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+
+    <div class="category orange">
+      <h2>Dribbler ID</h2>
+      <div class="levels"><span>1</span><span>2</span><span>3</span></div>
+    </div>
+  </div>
+
+  <!-- Ομάδες -->
+  <div class="teams">
+    <div class="team team-left">
+      <div class="helpers">
+        <span class="helper fifty-helper" title="50/50">50/50</span>
+		<span class="helper phone-helper" title="Τηλεφώνημα σε φίλο">
+			<i class="fa-solid fa-phone"></i>
+		</span>
+		<span class="helper" title="Διπλή Ευκαιρία">x2</span>
+      </div>
+      <div class="info">
+        <h3>ΑΧΑΣΤΟΙ</h3>
+        <div class="controls">
+          <button class="minus">−</button>
+          <div class="score">0</div>
+          <button class="plus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="team team-right">
+      <div class="info">
+        <h3>NO BALLS BOYS</h3>
+        <div class="controls">
+          <button class="minus">−</button>
+          <div class="score">0</div>
+          <button class="plus">+</button>
+        </div>
+      </div>
+      <div class="helpers">
+		<span class="helper fifty-helper" title="50/50">50/50</span>
+		<span class="helper phone-helper" title="Τηλεφώνημα σε φίλο">
+		<i class="fa-solid fa-phone"></i>
+		</span>
+		<span class="helper double-helper" title="Διπλή Ευκαιρία">x2</span>
+	 </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div id="categoryOverlay" class="overlay">
+  <div class="overlay-content"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const levels = document.querySelectorAll('.levels span');
+  const overlay = document.getElementById('categoryOverlay');
+  const overlayContent = document.querySelector('.overlay-content');
+  const playedLevels = new Set();
+  let lastRect = null;
+
+  // === ΚΛΙΚ ΣΕ ΕΠΙΠΕΔΑ (ΚΑΤΗΓΟΡΙΕΣ) ===
+  levels.forEach(level => {
+    level.addEventListener('click', e => {
+      const category = e.target.closest('.category');
+      const catName = category.querySelector('h2').innerText;
+      const levelNum = e.target.innerText;
+      const levelKey = `${catName}-${levelNum}`;
+      if (playedLevels.has(levelKey)) return;
+
+      const rect = category.getBoundingClientRect();
+      lastRect = rect;
+
+      const clone = category.cloneNode(true);
+      overlayContent.innerHTML = '';
+      overlayContent.appendChild(clone);
+      overlay.classList.add('active');
+
+      overlayContent.style.left = rect.left + 'px';
+      overlayContent.style.top = rect.top + 'px';
+      overlayContent.style.width = rect.width + 'px';
+      overlayContent.style.height = rect.height + 'px';
+      overlayContent.style.transform = 'scale(1)';
+      overlayContent.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+
+      requestAnimationFrame(() => {
+        const cx = window.innerWidth / 2 - rect.width / 2;
+        const cy = window.innerHeight / 2 - rect.height / 2;
+        overlayContent.style.left = cx + 'px';
+        overlayContent.style.top = cy + 'px';
+        overlayContent.style.width = rect.width * 1.2 + 'px';
+        overlayContent.style.height = rect.height * 1.2 + 'px';
+        overlayContent.style.transform = 'scale(1.2)';
+      });
+
+      setTimeout(() => {
+        document.querySelectorAll('.levels span').forEach(sp => {
+          const key = `${sp.closest('.category').querySelector('h2').innerText}-${sp.innerText}`;
+          if (key !== levelKey && !playedLevels.has(key)) sp.classList.add('disabled');
+        });
+
+        const cloneLevels = clone.querySelectorAll('.levels span');
+        cloneLevels.forEach(sp => {
+          if (sp.innerText === levelNum) {
+            sp.addEventListener('click', () => {
+              let categoryColor = '#C44DFF';
+              const colorMap = {
+                'History':'#DE7135','Geography':'#227EBD','Handler ID':'#902813',
+                'Logo ID':'#f97ac2','Guess the Song':'#1A1717','Top 5':'#77dd77',
+                'Movie ID':'#815BC9','Pokemon ID':'#C7B63E','Photo ID':'#17C2A3','Dribbler ID':'#CC0A5B'
+              };
+              if (colorMap[catName]) categoryColor = colorMap[catName];
+
+              overlayContent.innerHTML = `
+                <div class="question-box">
+                  <h2 style="color:${categoryColor};">${catName} – Επίπεδο ${levelNum}</h2>
+                  <p>Εδώ εμφανίζεται η ερώτηση για ${catName} ${levelNum}.</p>
+                  <button class="back-arrow" style="background:${categoryColor};color:white;">&#8592;</button>
+                </div>
+              `;
+
+              const backArrow = document.querySelector('.back-arrow');
+              backArrow.onmouseover = () => {
+                backArrow.style.background = 'white';
+                backArrow.style.color = categoryColor;
+              };
+              backArrow.onmouseout = () => {
+                backArrow.style.background = categoryColor;
+                backArrow.style.color = 'white';
+              };
+
+              // Επιστροφή animation
+              backArrow.onclick = () => {
+                overlayContent.style.transition = 'all 0.6s cubic-bezier(0.65, 0, 0.35, 1)';
+                overlayContent.style.left = lastRect.left + 'px';
+                overlayContent.style.top = lastRect.top + 'px';
+                overlayContent.style.width = lastRect.width + 'px';
+                overlayContent.style.height = lastRect.height + 'px';
+                overlayContent.style.transform = 'scale(1)';
+
+                setTimeout(() => {
+                  overlay.classList.remove('active');
+                  playedLevels.add(levelKey);
+                  document.querySelectorAll('.levels span').forEach(sp2 => {
+                    const key2 = `${sp2.closest('.category').querySelector('h2').innerText}-${sp2.innerText}`;
+                    if (playedLevels.has(key2)) sp2.classList.add('used');
+                    sp2.classList.remove('disabled');
+                  });
+                }, 600);
+              };
+            });
+          }
+        });
+      }, 600);
+    });
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+
+  // === Εφέ "shake" στο εικονίδιο τηλεφώνου ===
+  const phoneHelpers = document.querySelectorAll('.phone-helper i');
+  phoneHelpers.forEach(icon => {
+    const parent = icon.parentElement;
+    parent.addEventListener('mouseenter', () => {
+      icon.classList.add('fa-shake');
+    });
+    parent.addEventListener('mouseleave', () => {
+      icon.classList.remove('fa-shake');
+    });
+  });
+
+  // === Όταν πατιέται μια βοήθεια, κοκκινίζει αργά και απαλά ===
+  const helpers = document.querySelectorAll('.helper');
+
+  helpers.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!btn.classList.contains('active')) {
+        btn.classList.add('active');
+      }
+    });
+  });
+});
+</script>
+
+
+
+</body>
+</html>
